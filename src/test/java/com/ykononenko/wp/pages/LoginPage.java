@@ -14,9 +14,8 @@ public class LoginPage {
     private final SelenideElement loginError = $("#login_error");
 
     @Step("Открыть страницу логина")
-    public LoginPage openPage() {
+    public void openPage() {
         open("/wp-admin");
-        return this;
     }
 
     @Step("Ввести логин: {username}")
@@ -38,9 +37,9 @@ public class LoginPage {
 
     @Step("Залогиниться как {username}")
     public void loginAs(String username, String password) {
-        enterUsername(username);
-        enterPassword(password);
-        clickLogin();
+        enterUsername(username).
+                enterPassword(password).
+                clickLogin();
     }
 
     public boolean isLoginErrorDisplayed() {

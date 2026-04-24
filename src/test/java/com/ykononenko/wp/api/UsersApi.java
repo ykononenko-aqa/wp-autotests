@@ -1,29 +1,12 @@
 package com.ykononenko.wp.api;
 
 import com.ykononenko.wp.model.User;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 
-import static io.restassured.RestAssured.given;
-
-public class UsersApi {
-
-    private final String baseUrl;
-    private final String username;
-    private final String password;
+public class UsersApi extends AbstractApi {
 
     public UsersApi(String baseUrl, String username, String password) {
-        this.baseUrl = baseUrl;
-        this.username = username;
-        this.password = password;
-    }
-
-    private RequestSpecification givenWithAuth() {
-        return given()
-                .baseUri(baseUrl)
-                .auth().preemptive().basic(username, password)
-                .contentType(ContentType.JSON);
+        super(baseUrl, username, password);
     }
 
     public Response createUser(User user) {
