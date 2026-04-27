@@ -5,6 +5,8 @@ import io.restassured.response.Response;
 
 public class UsersApi extends AbstractApi {
 
+    private final String USERS_ENDPOINT = "/wp-json/wp/v2/users";
+
     public UsersApi(String baseUrl, String username, String password) {
         super(baseUrl, username, password);
     }
@@ -13,7 +15,7 @@ public class UsersApi extends AbstractApi {
         return givenWithAuth()
                 .body(user)
                 .when()
-                .post("/wp-json/wp/v2/users");
+                .post(USERS_ENDPOINT);
     }
 
     public Response deleteUser(int userId) {
@@ -21,12 +23,12 @@ public class UsersApi extends AbstractApi {
                 .queryParam("force", true)
                 .queryParam("reassign", 1)
                 .when()
-                .delete("/wp-json/wp/v2/users/{id}", userId);
+                .delete(USERS_ENDPOINT +  "/{id}", userId);
     }
 
     public Response getUser(int userId) {
         return givenWithAuth()
                 .when()
-                .get("/wp-json/wp/v2/users/{id}", userId);
+                .get(USERS_ENDPOINT +  "/{id}", userId);
     }
 }
