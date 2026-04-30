@@ -20,6 +20,7 @@ public class PostApi extends AbstractApi {
 
     public Response getPost(int postId) {
         return givenWithAuth()
+                .queryParam("context", "edit")
                 .when()
                 .get(POST_ENDPOINT + "/{id}", postId);
     }

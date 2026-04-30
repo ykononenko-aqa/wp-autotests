@@ -60,7 +60,7 @@ public class UserLoginHybridTest extends BaseTest {
         loginPage.openPage();
         loginPage.loginAs(login, password);
         $("#wpadminbar").shouldBe(visible);
-        $("body").shouldHave(text("Привет, мир!"));
+        $("body").shouldHave(text("Блог"));
     }
 
 
