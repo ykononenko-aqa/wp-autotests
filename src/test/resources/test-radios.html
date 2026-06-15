@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Тест радио-кнопок для Selenide</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .option { margin: 10px 0; }
+    </style>
+</head>
+<body>
+<h2>Выберите цвет</h2>
+
+<div class="option">
+    <input type="radio" name="color" value="red" id="color_red">
+    <label for="color_red">Красный</label>
+</div>
+
+<div class="option">
+    <input type="radio" name="color" value="green" id="color_green">
+    <label for="color_green">Зелёный</label>
+</div>
+
+<div class="option">
+    <input type="radio" name="color" value="blue" id="color_blue">
+    <label for="color_blue">Синий</label>
+</div>
+
+<button id="submitBtn" onclick="showResult()">Показать выбранный</button>
+<p id="result"></p>
+
+<script>
+    function showResult() {
+        const selected = document.querySelector('input[name="color"]:checked');
+        const result = selected ? selected.value : 'ничего не выбрано';
+        document.getElementById('result').innerText = 'Выбрано: ' + result;
+    }
+</script>
+</body>
+</html>

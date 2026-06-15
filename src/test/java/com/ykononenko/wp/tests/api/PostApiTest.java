@@ -18,7 +18,7 @@ public class PostApiTest extends BaseTest {
     private PostApi postApi;
     private Faker faker;
     private Integer createdPostId;
-    private SoftAssertions softAssertions = new SoftAssertions();
+    private final SoftAssertions softAssertions = new SoftAssertions();
 
     @BeforeEach
     void initApi() {

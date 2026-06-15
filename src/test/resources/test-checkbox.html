@@ -1,0 +1,46 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Тест чекбоксов для Selenide</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .option { margin: 10px 0; }
+        .selected-values { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h2>Выберите ваши интересы</h2>
+
+<div class="option">
+    <input type="checkbox" name="interests" value="programming" id="interest_programming">
+    <label for="interest_programming">Программирование</label>
+</div>
+
+<div class="option">
+    <input type="checkbox" name="interests" value="testing" id="interest_testing">
+    <label for="interest_testing">Тестирование</label>
+</div>
+
+<div class="option">
+    <input type="checkbox" name="interests" value="devops" id="interest_devops">
+    <label for="interest_devops">DevOps</label>
+</div>
+
+<div class="option">
+    <input type="checkbox" name="interests" value="design" id="interest_design">
+    <label for="interest_design">Дизайн</label>
+</div>
+
+<button id="showSelectedBtn" onclick="showSelected()">Показать выбранные</button>
+<p id="result" class="selected-values"></p>
+
+<script>
+    function showSelected() {
+        const checkboxes = document.querySelectorAll('input[name="interests"]:checked');
+        const values = Array.from(checkboxes).map(cb => cb.value);
+        const resultText = values.length ? values.join(', ') : 'ничего не выбрано';
+        document.getElementById('result').innerText = 'Выбрано: ' + resultText;
+    }
+</script>
+</body>
+</html>
