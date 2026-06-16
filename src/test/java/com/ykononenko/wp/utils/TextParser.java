@@ -8,4 +8,8 @@ public class TextParser {
         String withoutPrefix = str.replace(preText, "").trim();
         return Arrays.asList(withoutPrefix.split("\\s*,\\s*"));
     }
+
+    public int getAmountPrice(String price) {
+        return Integer.parseInt(price.replace("Сумма:", "").replace("руб.", "").trim());
+    }
 }

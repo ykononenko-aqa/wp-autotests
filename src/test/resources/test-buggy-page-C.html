@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Баг C - Каждый третий чекбокс вычитает</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .checkbox-item { margin: 8px 0; }
+        .total-panel { position: fixed; top: 20px; right: 20px; background: #f0f0f0; padding: 15px; border-radius: 8px; font-size: 18px; }
+        .total-panel span { font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+<div class="total-panel">
+    Сумма: <span id="total">0</span> руб.
+</div>
+
+<h2>Выберите услуги</h2>
+<div id="checkboxes-list"></div>
+
+<script>
+    const items = [
+        { name: "Консультация", price: 1000, id: "item1" },
+        { name: "Дизайн", price: 1500, id: "item2" },
+        { name: "Вёрстка", price: 800, id: "item3" },
+        { name: "Тестирование", price: 1200, id: "item4" },
+        { name: "Поддержка", price: 2000, id: "item5" },
+        { name: "Оптимизация", price: 900, id: "item6" },
+        { name: "SEO", price: 1100, id: "item7" },
+        { name: "Аудит", price: 700, id: "item8" },
+        { name: "Обучение", price: 3000, id: "item9" },
+        { name: "Бонус", price: 500, id: "item10" }
+    ];
+
+    let selected = new Map(); // id -> цена
+    let clickCounter = 0;
+    const totalSpan = document.getElementById("total");
+    const container = document.getElementById("checkboxes-list");
+
+    function render() {
+        container.innerHTML = "";
+        items.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "checkbox-item";
+            div.innerHTML = `
+                    <input type="checkbox" id="${item.id}" value="${item.price}" data-price="${item.price}">
+                    <label for="${item.id}">${item.name} (${item.price} руб.)</label>
+                `;
+            const cb = div.querySelector("input");
+            cb.addEventListener("change", (e) => updateTotal(item.id, item.price, e.target.checked));
+            container.appendChild(div);
+        });
+    }
+
+    function updateTotal(id, price, isChecked) {
+        clickCounter++;
+
+        // БАГ: каждый 3-й клик меняет логику (если включили — вычитаем, если выключили — прибавляем)
+        const isBuggyClick = (clickCounter % 3 === 0);
+
+        if (isChecked) {
+            if (isBuggyClick) {
+                // вместо сложения — вычитаем
+                selected.set(id, -price);
+            } else {
+                selected.set(id, price);
+            }
+        } else {
+            selected.delete(id);
+        }
+
+        let total = 0;
+        selected.forEach(p => total += p);
+        totalSpan.innerText = total;
+    }
+
+    render();
+</script>
+</body>
+</html>

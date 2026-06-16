@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Баг B - Пороговая логика</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .checkbox-item { margin: 8px 0; }
+        .total-panel { position: fixed; top: 20px; right: 20px; background: #f0f0f0; padding: 15px; border-radius: 8px; font-size: 18px; }
+        .total-panel span { font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+<div class="total-panel">
+    Сумма: <span id="total">0</span> руб.
+</div>
+
+<h2>Выберите услуги</h2>
+<div id="checkboxes-list"></div>
+
+<script>
+    const items = [
+        { name: "Консультация", price: 1000, id: "item1" },
+        { name: "Дизайн", price: 1500, id: "item2" },
+        { name: "Вёрстка", price: 800, id: "item3" },
+        { name: "Тестирование", price: 1200, id: "item4" },
+        { name: "Поддержка", price: 2000, id: "item5" },
+        { name: "Оптимизация", price: 900, id: "item6" },
+        { name: "SEO", price: 1100, id: "item7" },
+        { name: "Аудит", price: 700, id: "item8" },
+        { name: "Обучение", price: 3000, id: "item9" },
+        { name: "Бонус", price: 500, id: "item10" }
+    ];
+
+    let selected = new Set();
+    let totalBeforeBug = 0;
+    const totalSpan = document.getElementById("total");
+    const container = document.getElementById("checkboxes-list");
+
+    function render() {
+        container.innerHTML = "";
+        items.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "checkbox-item";
+            div.innerHTML = `
+                    <input type="checkbox" value="${item.price}" id="${item.id}" data-price="${item.price}">
+                    <label for="${item.id}">${item.name} (${item.price} руб.)</label>
+                `;
+            const cb = div.querySelector("input");
+            if (selected.has(item.id)) cb.checked = true;
+            cb.addEventListener("change", (e) => updateTotal(item.id, item.price, e.target.checked));
+            container.appendChild(div);
+        });
+    }
+
+    let bugActive = false;
+
+    function updateTotal(id, price, isChecked) {
+        if (isChecked) {
+            selected.add(id);
+        } else {
+            selected.delete(id);
+        }
+
+        let total = 0;
+        selected.forEach(id => {
+            const item = items.find(i => i.id === id);
+            if (item) total += item.price;
+        });
+
+        // БАГ: если сумма превышает 3000, начинаем вычитать вместо сложения
+        if (!bugActive && total > 3000) {
+            bugActive = true;
+            totalBeforeBug = total;
+        }
+
+        if (bugActive) {
+            // пересчитываем "ломано": новая сумма = то, что было до бага, минус то, что набрали сверху
+            let currentSumWithoutBug = 0;
+            selected.forEach(id => {
+                const item = items.find(i => i.id === id);
+                if (item) currentSumWithoutBug += item.price;
+            });
+            const diff = currentSumWithoutBug - totalBeforeBug;
+            total = totalBeforeBug - diff;
+            if (total < 0) total = 0;
+        }
+
+        totalSpan.innerText = total;
+    }
+
+    render();
+</script>
+</body>
+</html>
