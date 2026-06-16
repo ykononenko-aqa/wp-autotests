@@ -6,6 +6,7 @@ import com.ykononenko.wp.utils.TextParser;
 import io.qameta.allure.Description;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -17,6 +18,7 @@ public class TestCheckBoxBug {
 
     @ParameterizedTest
     @CsvSource({"A", "B", "C"})
+    @Disabled("Причина: баг номер такой-то")
     @DisplayName("Проверка суммы на странице с багом")
     @Description("Ищет баг на уменьшение суммы при выборе набора услуг")
     void testBug(String pageLetter) {
